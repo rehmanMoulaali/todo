@@ -34,9 +34,13 @@ def update_status(id):
     updater_status(id,new_status)
     return redirect(url_for('renderindex'))
 
-@app.route('/todo',methods=['PUT'])
+@app.route('/todo/update',methods=['POST','PUT'])
 def update_todo_api():
-    update_todo(request.get_json())
+    todo_id = request.form.get('id')
+    title = request.form.get('title')
+    description = request.form.get('description')
+    print(todo_id)
+    update_todo(todo_id,title,description)
     return "added sucessfully"
 
 @app.route('/todo/<int:id>', methods=['POST', 'DELETE'])

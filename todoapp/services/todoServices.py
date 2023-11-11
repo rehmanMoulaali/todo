@@ -16,13 +16,13 @@ def updater_status(id,status):
     todo1.set_status(status)
     save_todo(todo=todo1)
 
-def update_todo(json_todo):
-    todo=get_by_id(json_todo.get('id'))
+def update_todo(todo_id,title,description):
+    todo=get_by_id(todo_id)
     if(todo is None):
         return None
-    todo.title=json_todo.get('title')
-    todo.descrition=json_todo.get('descrition')
-    todo.status=json_todo.get('status')
+    todo.title=title
+    todo.descrition=description
+    print(todo)
     save_todo(todo=todo)
 
 
