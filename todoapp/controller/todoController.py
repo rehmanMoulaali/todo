@@ -20,7 +20,7 @@ def get_all():
 
 @app.route('/todo',methods=['GET','POST'])
 def post_todo():
-    save(request.form.get('title'),request.form.get('description'))
+    save(request.form.get('title'),request.form.get('description'),request.form.get('target_date'))
     return redirect(url_for('renderindex'))
 
 @app.route('/todo/status/<int:id>',methods=['PUT','POST'])
@@ -39,8 +39,9 @@ def update_todo_api():
     todo_id = request.form.get('id')
     title = request.form.get('title')
     description = request.form.get('description')
+    target_date=request.form.get('target_date')
     print(todo_id)
-    update_todo(todo_id,title,description)
+    update_todo(todo_id,title,description,target_date)
     return "added sucessfully"
 
 @app.route('/todo/<int:id>', methods=['POST', 'DELETE'])

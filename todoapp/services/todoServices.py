@@ -6,8 +6,8 @@ from todoapp.models.todo import Todo,TodoStatus
 def getAll():
     return getAllTodo()
 
-def save(title,descrition):
-    save_todo(Todo(title=title,description=descrition,status=TodoStatus.PENDING))
+def save(title,descrition,target_date):
+    save_todo(Todo(title=title,description=descrition,status=TodoStatus.PENDING,target_date=target_date))
 
 def updater_status(id,status):
     todo1=get_by_id(id)
@@ -16,12 +16,13 @@ def updater_status(id,status):
     todo1.set_status(status)
     save_todo(todo=todo1)
 
-def update_todo(todo_id,title,description):
+def update_todo(todo_id,title,description,target_date):
     todo=get_by_id(todo_id)
     if(todo is None):
         return None
     todo.title=title
     todo.descrition=description
+    todo.target_date=target_date
     print(todo)
     save_todo(todo=todo)
 

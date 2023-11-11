@@ -8,6 +8,7 @@ def getAllTodo():
         'id': todo.id,
         'name': todo.title,
         'description': todo.description,
+        'target_date':todo.target_date,
         'status': todo.status
     } for todo in todo_list]
 
