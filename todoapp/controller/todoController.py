@@ -8,7 +8,6 @@ from flask_login import login_user, logout_user, login_required,current_user
 @login_required
 def renderindex():
     todos=getAll()
-    print(todos)
     return render_template('index.html',todos=current_user.all_todos())
 
 @app.route('/hello')
@@ -39,7 +38,6 @@ def update_todo_api():
     title = request.form.get('title')
     description = request.form.get('description')
     target_date=request.form.get('target_date')
-    print(todo_id)
     update_todo(todo_id,title,description,target_date)
     return redirect(url_for('renderindex'))
 
