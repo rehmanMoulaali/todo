@@ -1,20 +1,18 @@
 from todoapp.models.todo import Todo
+from todoapp.models.user import Users
 from todoapp import db
-from todoapp import app1 as app
 
 def getAllTodo():
-    todo_list = Todo.query.all()
-    return [ {
-        'id': todo.id,
-        'name': todo.title,
-        'description': todo.description,
-        'target_date':todo.target_date,
-        'status': todo.status
-    } for todo in todo_list]
+    obj_list = Todo.query.all()
+    return [ obj.serialize() for obj in obj_list]
 
-def save_todo(todo):
-    db.session.add(todo)
-    db.session.commit()
+def save(data, description=None, target_date=None):
+    try:
+        db.session.add(data)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        raise e
 
 def get_by_id(id):
     return Todo.query.get(id)
