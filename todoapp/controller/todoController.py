@@ -80,11 +80,10 @@ def user_login():
     login_user(user)
     return {"status":True}
 
-
+# need to make page
 @app.route('/logout')
 def logout_page():
     logout_user()
-    flash("You have been logged out!", category='info')
     return redirect(url_for("login_page"))
 
     
