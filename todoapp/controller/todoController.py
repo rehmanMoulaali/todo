@@ -6,6 +6,7 @@ from todoapp.services.table_services import *
 
 
 @app.route('/')
+@app.route('/tables')
 @login_required
 def render_tables():
     return render_template('todo_tables.html',tables=current_user.all_todo_tables())
