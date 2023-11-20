@@ -3,7 +3,7 @@ from todoapp.services.todoServices import getAll ,save_todo, updater_status,upda
 from flask import request,render_template,url_for,redirect,flash
 from flask_login import login_user, logout_user, login_required,current_user
 from todoapp.services.table_services import *
-
+from todoapp.forms.forms import *
 
 @app.route('/')
 @app.route('/tables')
@@ -39,7 +39,7 @@ def add_user_to_table():
 @login_required
 def renderindex(id):
     todos=getAll()
-    return render_template('index.html',todos=get_by_id(id).get_todos())
+    return render_template('index.html',todos=get_by_id(id).get_todos(),table_name=get_by_id(id).title)
 
 
 # @app.route('/todos')
@@ -75,41 +75,40 @@ def delete_todo_api(id):
     table_id=delete_todo(id)
     return redirect(url_for('renderindex',id=table_id))
 
-@app.route('/register',methods=['POST'])
+@app.route('/register',methods=['POST','GET'])
 def register_user():
-    
-    name = request.form.get('name')
-    email = request.form['email']
-    password = request.form['password']
-    c_password = request.form['C_password']
-    if(password!=c_password):
-        return {"message":"please ensure password","status":False}
-    register_user_service(name,email,password)
-    return {"message":"register sucessfull please login","status":True}
+    form = RegisterForm()
+    if form.validate_on_submit():
+        register_user_service(name=form.username.data,
+                              email=form.email_address.data,
+                              password=form.password1.data)
+        flash(f"Account created successfully!", category='success')
+        return redirect(url_for('login_page'))
+    if form.errors != {}: #If there are not errors from the validations
+        for err_msg in form.errors.values():
+            flash(f'There was an error with creating a user: {err_msg}', category='danger')
+    return render_template('register.html', form=form)
 
-@app.route('/register')
-def register_page():
-    return render_template('login-signup.html')
 
-@app.route('/login',methods=['GET'])
-def login_page():
-    return render_template('login-signup.html')
 
-@app.route('/login',methods=['POST'])
+@app.route('/login',methods=['POST','GET'])
 def user_login():
-    email = request.form['email']
-    password = request.form['password']
-    user = get_verified_user(email,password)
-    if(not user):
-        return {"status":False}
-    login_user(user)
-    return {"status":True}
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = get_verified_user(email=form.email.data,password=form.password.data)
+        if user:
+            login_user(user=user)
+            return redirect(url_for('render_tables'))
+        else:
+            flash('Username and password are not match! Please try again', category='danger')
+    return render_template('login.html', form=form)
+    
 
 # need to make page
 @app.route('/logout')
 def logout_page():
     logout_user()
-    return redirect(url_for("login_page"))
+    return redirect(url_for("user_login"))
 
     
 

@@ -10,6 +10,6 @@ app1.config['SECRET_KEY'] = 'ec9439cfc6c796ae2029594d'
 db = SQLAlchemy(app1)
 bcrypt = Bcrypt(app1)
 login_manager = LoginManager(app1)
-login_manager.login_view = "login_page"
+login_manager.login_view = "user_login"
 login_manager.login_message_category = "info"
 from todoapp.controller import todoController
